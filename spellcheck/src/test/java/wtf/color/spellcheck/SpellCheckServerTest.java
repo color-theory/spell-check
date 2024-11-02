@@ -25,11 +25,11 @@ public class SpellCheckServerTest {
     }
 
     @Test
-    void testEchoResponse() throws IOException {
-        String inputText = "Hello, JUnit!";
+    void testResponse() throws IOException {
+        String inputText = "henlo";
         String response = sendPostRequest("http://localhost:8080/spellcheck", inputText);
 
-        assertEquals(inputText, response);
+        assertEquals(response, "hello");
     }
 
     private String sendPostRequest(String urlString, String body) throws IOException {
