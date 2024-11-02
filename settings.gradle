@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'spell-check'
-include('app')
+include('spellcheck')
