@@ -11,19 +11,20 @@ import java.nio.charset.StandardCharsets;
 
 public class SpellCheckServer {
     public static void main(String[] args) throws IOException {
-        HttpServer server = createServer(8080);
+        int port = args.length > 0 ? Integer.parseInt(args[0]) : 8080;
+        HttpServer server = createServer(port);
         server.start();
-        System.out.println("Server started on port 8080");
+        System.out.println("Server started on port " + port);
     }
 
     public static HttpServer createServer(int port) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-        server.createContext("/echo", new EchoHandler());
+        server.createContext("/spellcheck", new SpellCheckHandler());
         server.setExecutor(null);
         return server;
     }
 
-    static class EchoHandler implements HttpHandler {
+    static class SpellCheckHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             if ("POST".equals(exchange.getRequestMethod())) {

@@ -27,7 +27,7 @@ public class SpellCheckServerTest {
     @Test
     void testEchoResponse() throws IOException {
         String inputText = "Hello, JUnit!";
-        String response = sendPostRequest("http://localhost:8080/echo", inputText);
+        String response = sendPostRequest("http://localhost:8080/spellcheck", inputText);
 
         assertEquals(inputText, response);
     }
