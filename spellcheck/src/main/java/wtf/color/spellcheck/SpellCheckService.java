@@ -47,7 +47,7 @@ public class SpellCheckService {
 
     public String findClosestMatch(String word) throws Exception {
         IndexSearcher searcher = new IndexSearcher(DirectoryReader.open(index));
-        Query query = new FuzzyQuery(new Term("word", word), 1);
+        Query query = new FuzzyQuery(new Term("word", word), 2);
 
         TopDocs results = searcher.search(query, 1);
         if (results.totalHits.value() > 0) {
