@@ -17,12 +17,15 @@ repositories {
 
 dependencies {
     // Use JUnit Jupiter for testing.
-    testImplementation libs.junit.jupiter
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // This dependency is used by the application.
-    implementation libs.guava
+    implementation 'com.google.guava:guava:33.2.1-jre'
+    implementation 'org.apache.lucene:lucene-core:10.0.0'
+    implementation 'org.apache.lucene:lucene-analyzers-common:8.11.4'
+    
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -34,7 +37,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'SpellCheckServer'
+    mainClass = 'wtf.color.spellcheck.SpellCheckServer'
 }
 
 tasks.named('test') {
