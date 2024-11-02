@@ -26,10 +26,10 @@ public class SpellCheckServerTest {
 
     @Test
     void testResponse() throws IOException {
-        String inputText = "henlo";
+        String inputText = "Henlo, Wornld!";
         String response = sendPostRequest("http://localhost:8080/spellcheck", inputText);
 
-        assertEquals(response, "hello");
+        assertEquals(response, "Hello, World!");
     }
 
     private String sendPostRequest(String urlString, String body) throws IOException {

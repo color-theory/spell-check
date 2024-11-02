@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SpellCheckServer {
     public static HttpServer createServer(int port) throws IOException {
@@ -31,20 +33,37 @@ public class SpellCheckServer {
                 InputStream requestBody = exchange.getRequestBody();
                 String requestText = new String(requestBody.readAllBytes(), StandardCharsets.UTF_8);
 
-                String corrected;
-                try{
-                    corrected = spellChecker.findClosestMatch(requestText);
-                } catch (Exception e) {
-                    corrected = "Error: " + e.getMessage();
+                Pattern pattern = Pattern.compile("(\\w+)(\\W*)");
+                Matcher matcher = pattern.matcher(requestText);
+
+                StringBuilder result = new StringBuilder();
+                while (matcher.find()) {
+                    String word = matcher.group(1); // The word matched
+                    String punctuation = matcher.group(2); // The punctuation or whitespace after the word
+
+                    String corrected;
+                    try{
+                        corrected = spellChecker.findClosestMatch(word.toLowerCase());
+                    } catch (Exception e) {
+                        corrected = "Error: " + e.getMessage();
+                    }
+                    if (corrected == null) {
+                        corrected = word;
+                    }else{
+                        CaseCorrector caseCorrector = new CaseCorrector();
+                        corrected = caseCorrector.applyOriginalCasePattern(word, corrected);
+                    }
+
+                    // Append the transformed word and the original punctuation
+                    result.append(corrected).append(punctuation);
                 }
-                if (corrected == null) {
-                    corrected = "No suggestions found";
-                }
+
+
                 exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=UTF-8");
-                exchange.sendResponseHeaders(200, corrected.getBytes().length);
+                exchange.sendResponseHeaders(200, result.toString().getBytes().length);
 
                 OutputStream responseBody = exchange.getResponseBody();
-                responseBody.write(corrected.getBytes());
+                responseBody.write(result.toString().getBytes());
                 responseBody.close();
             } else {
                 exchange.sendResponseHeaders(405, -1);
