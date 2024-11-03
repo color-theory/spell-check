@@ -24,6 +24,7 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:33.2.1-jre'
     implementation 'org.apache.lucene:lucene-core:10.0.0'
+    implementation 'org.apache.lucene:lucene-queries:10.0.0'
     implementation 'org.apache.lucene:lucene-analyzers-common:8.11.4'
     
 }
