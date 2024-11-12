@@ -1,4 +1,5 @@
 package wtf.color.spellcheck;
+
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.*;
 import java.io.IOException;
@@ -29,12 +30,12 @@ public class SpellCheckServerTest {
         String inputText = "Henlo, Wornld!";
         String response = sendPostRequest("http://localhost:8080/spellcheck", inputText);
         System.out.println(response);
-        assertEquals(response, "Hello, World!");
+        assertEquals("Hello, World!", response);
     }
 
     private String sendPostRequest(String urlString, String body) throws IOException {
         URL url;
-        try{
+        try {
             url = new URI(urlString).toURL();
         } catch (Exception e) {
             throw new IllegalArgumentException("Invalid URL: " + urlString, e);

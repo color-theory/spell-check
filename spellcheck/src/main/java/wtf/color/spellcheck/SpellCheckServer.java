@@ -1,4 +1,5 @@
 package wtf.color.spellcheck;
+
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
@@ -38,18 +39,18 @@ public class SpellCheckServer {
 
                 StringBuilder result = new StringBuilder();
                 while (matcher.find()) {
-                    String word = matcher.group(1); // The word matched
-                    String punctuation = matcher.group(2); // The punctuation or whitespace after the word
+                    String word = matcher.group(1);
+                    String punctuation = matcher.group(2);
 
                     String corrected;
-                    try{
+                    try {
                         corrected = spellChecker.findClosestMatch(word.toLowerCase());
                     } catch (Exception e) {
                         corrected = "Error: " + e.getMessage();
                     }
                     if (corrected == null) {
-                        corrected = word;
-                    }else{
+                        corrected = "Not Found";
+                    } else {
                         CaseCorrector caseCorrector = new CaseCorrector();
                         corrected = caseCorrector.applyOriginalCasePattern(word, corrected);
                     }
@@ -57,7 +58,6 @@ public class SpellCheckServer {
                     // Append the transformed word and the original punctuation
                     result.append(corrected).append(punctuation);
                 }
-
 
                 exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=UTF-8");
                 exchange.sendResponseHeaders(200, result.toString().getBytes().length);

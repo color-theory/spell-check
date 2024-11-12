@@ -1,4 +1,5 @@
 package wtf.color.spellcheck;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -48,16 +49,17 @@ public class SpellCheckService {
             while ((line = reader.readLine()) != null) {
                 Document doc = new Document();
 
-                Pattern pattern = Pattern.compile("([a-zA-Z]+),(\\d+).*$");
+                Pattern pattern = Pattern.compile("([a-zA-Z]+)\t(\\d+).*$");
                 Matcher matcher = pattern.matcher(line);
                 if (!matcher.find()) {
                     continue;
                 }
                 Float frequency = Float.parseFloat(matcher.group(2));
                 TextField wordField = new TextField("word", matcher.group(1), Field.Store.YES);
-                FloatDocValuesField frequencyField = new FloatDocValuesField("frequency", (float) Math.log(frequency + 1));
+                FloatDocValuesField frequencyField = new FloatDocValuesField("frequency",
+                        (float) Math.log(frequency + 1));
                 StoredField storedFrequencyField = new StoredField("frequency", frequency);
-                
+
                 doc.add(storedFrequencyField);
                 doc.add(wordField);
                 doc.add(frequencyField);
@@ -81,11 +83,10 @@ public class SpellCheckService {
             StoredFields storedFields = searcher.storedFields();
             return storedFields.document(exactMatchDocs.scoreDocs[0].doc).get("word");
         }
-        
+
         FuzzyQuery query = new FuzzyQuery(new Term("word", word), 1);
         FunctionScoreQuery boostedQuery = new FunctionScoreQuery(query, boostSource);
 
-        
         TopDocs results = searcher.search(boostedQuery, 10);
         Document bestMatch = null;
 
@@ -96,8 +97,9 @@ public class SpellCheckService {
                 Document document = storedFields.document(doc.doc);
                 IndexableField frequencyField = document.getField("frequency");
                 int frequency = (frequencyField != null) ? frequencyField.numericValue().intValue() : 0;
-                if (doc.score >= maxScore && frequency > 70000) {
-                    System.out.println("word: " + document.get("word") + " score: " + doc.score + " frequency: " + frequency);
+                if (doc.score >= maxScore && frequency > 0) {
+                    System.out.println(
+                            "word: " + document.get("word") + " score: " + doc.score + " frequency: " + frequency);
                     maxScore = doc.score;
                     bestMatch = document;
                     break;

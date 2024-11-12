@@ -4,5 +4,7 @@
 # Ignore Gradle build output directory
 bin
 build
-spellcheck/src/main/resources/dict.txt
+dict.txt
+unigram_freq.csv
+words.txt
 .vscode
