@@ -84,7 +84,7 @@ public class SpellCheckService {
             return storedFields.document(exactMatchDocs.scoreDocs[0].doc).get("word");
         }
 
-        FuzzyQuery query = new FuzzyQuery(new Term("word", word), 1);
+        FuzzyQuery query = new FuzzyQuery(new Term("word", word), 2);
         FunctionScoreQuery boostedQuery = new FunctionScoreQuery(query, boostSource);
 
         TopDocs results = searcher.search(boostedQuery, 10);

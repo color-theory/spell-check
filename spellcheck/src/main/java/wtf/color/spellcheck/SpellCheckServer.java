@@ -49,7 +49,7 @@ public class SpellCheckServer {
                         corrected = "Error: " + e.getMessage();
                     }
                     if (corrected == null) {
-                        corrected = "Not Found";
+                        corrected = word;
                     } else {
                         CaseCorrector caseCorrector = new CaseCorrector();
                         corrected = caseCorrector.applyOriginalCasePattern(word, corrected);

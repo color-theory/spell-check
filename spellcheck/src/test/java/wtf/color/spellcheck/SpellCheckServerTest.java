@@ -27,7 +27,7 @@ public class SpellCheckServerTest {
 
     @Test
     void testResponse() throws IOException {
-        String inputText = "Henlo, Wornld!";
+        String inputText = "Henlo, Worlf!";
         String response = sendPostRequest("http://localhost:8080/spellcheck", inputText);
         System.out.println(response);
         assertEquals("Hello, World!", response);
